@@ -1,2 +1,2 @@
 # sm-net
-Spacemesh devnets and testnets releases
+Spacemesh devnets and testnets community releases
