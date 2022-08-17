@@ -23,6 +23,16 @@ jobs:
       - name: checkout
         uses: actions/checkout@v2
       # Creating release
+      - name: load JSON
+        id: json
+        run: |
+          content=`cat ./release.json`
+          # the following lines are only required for multi line json
+          content="${content//'%'/'%25'}"
+          content="${content//$'\n'/'%0A'}"
+          content="${content//$'\r'/'%0D'}"
+          # end of optional handling for multi line json
+          echo "::set-output name=json::$content"
       - name: build release notes
         id: notes
         run: |
@@ -30,14 +40,14 @@ jobs:
           echo "::set-output name=body::${BODY}"
       - uses: rickstaa/action-create-tag@v1
         with:
-          tag: ${{ fromJson('./release.json').id }}
+          tag: ${{ fromJson(steps.json.outputs.json).id }}
       - name: Create Release
         id: create-release
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: Release ${{ fromJson('./release.json').id }}
+          name: Release ${{ fromJson(steps.json.outputs.json).id }}
           body: ${{ steps.notes.outputs.body }}
           draft: false
           prerelease: false

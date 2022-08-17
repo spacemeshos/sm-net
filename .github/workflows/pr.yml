@@ -21,10 +21,20 @@ jobs:
       - name: checkout
         uses: actions/checkout@v2
       # Check that the tag is not exist yet
+      - name: load JSON
+        id: json
+        run: |
+          content=`cat ./release.json`
+          # the following lines are only required for multi line json
+          content="${content//'%'/'%25'}"
+          content="${content//$'\n'/'%0A'}"
+          content="${content//$'\r'/'%0D'}"
+          # end of optional handling for multi line json
+          echo "::set-output name=json::$content"
       - uses: mukunku/tag-exists-action@v1.0.0
         id: checkTag
         with: 
-          tag: ${{ fromJson('./release.json').id }}
+          tag: ${{ fromJson(steps.json.outputs.json).id }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Tag should not exist
@@ -35,6 +45,9 @@ jobs:
         id: notes
         run: |
           BODY=$(./gen-notes.js)
+          BODY="${BODY//'%'/'%25'}"
+          BODY="${BODY//$'\n'/'%0A'}"
+          BODY="${BODY//$'\r'/'%0D'}"
           echo "::set-output name=body::${BODY}"
       - name: Post notes to PR
         if: github.event_name == 'pull_request'
