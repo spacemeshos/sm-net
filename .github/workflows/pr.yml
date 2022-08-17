@@ -20,6 +20,16 @@ jobs:
           node-version: '14'
       - name: checkout
         uses: actions/checkout@v2
+      # Check that the tag is not exist yet
+      - uses: mukunku/tag-exists-action@v1.0.0
+        id: checkTag
+        with: 
+          tag: ${{ fromJson('./release.json').id }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Tag should not exist
+        if: ${{ steps.checkTag.outputs.exists != 'false' }}
+        run: exit 1
       # Creating release
       - name: build release notes
         id: notes
