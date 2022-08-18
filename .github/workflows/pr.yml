@@ -1,0 +1,46 @@
+name: Verify
+
+# Trigger the workflow on all pull requests, and on push to specific branches
+on:
+  # run for all pull requests and pushes to certain branches
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      # Preparing env
+      - name: Install Node.js, NPM
+        if: ${{ steps.result.outputs.status != 'success' }}
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: '14'
+      - name: checkout
+        uses: actions/checkout@v2
+      # Check that the tag is not exist yet
+      - name: load JSON
+        id: json
+        run: |
+          content=`cat ./release.json`
+          # the following lines are only required for multi line json
+          content="${content//'%'/'%25'}"
+          content="${content//$'\n'/'%0A'}"
+          content="${content//$'\r'/'%0D'}"
+          # end of optional handling for multi line json
+          echo "::set-output name=json::$content"
+      # Creating release
+      - name: build release notes
+        id: notes
+        run: |
+          BODY=$(./gen-notes.js)
+          BODY="${BODY//'%'/'%25'}"
+          BODY="${BODY//$'\n'/'%0A'}"
+          BODY="${BODY//$'\r'/'%0D'}"
+          echo "::set-output name=body::${BODY}"
+      - name: Post notes to PR
+        if: github.event_name == 'pull_request'
+        uses: mshick/add-pr-comment@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          message: ${{ steps.notes.outputs.body }}
