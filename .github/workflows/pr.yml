@@ -1,8 +1,5 @@
 name: Verify
 
-env:
-  go-version: '1.18.2'
-
 # Trigger the workflow on all pull requests, and on push to specific branches
 on:
   # run for all pull requests and pushes to certain branches
@@ -31,15 +28,6 @@ jobs:
           content="${content//$'\r'/'%0D'}"
           # end of optional handling for multi line json
           echo "::set-output name=json::$content"
-      - uses: mukunku/tag-exists-action@v1.0.0
-        id: checkTag
-        with: 
-          tag: ${{ fromJson(steps.json.outputs.json).id }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Tag should not exist
-        if: ${{ steps.checkTag.outputs.exists != 'false' }}
-        run: exit 1
       # Creating release
       - name: build release notes
         id: notes

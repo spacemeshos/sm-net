@@ -1,17 +1,12 @@
-name: Publish network
+name: Create Release draft
 
-env:
-  go-version: '1.18.2'
-
-# Trigger the workflow on all pull requests, and on push to specific branches
 on:
-  # run for all pull requests and pushes to certain branches
   push:
-    branches:
-      - main
+    tags:
+    - '*'
 
 jobs:
-  publish:
+  verify:
     runs-on: ubuntu-latest
     steps:
       # Preparing env
@@ -22,7 +17,10 @@ jobs:
           node-version: '14'
       - name: checkout
         uses: actions/checkout@v2
-      # Creating release
+      # Load tag
+      - uses: olegtarasov/get-tag@v2.1
+        id: tagName
+      # Load release data
       - name: load JSON
         id: json
         run: |
@@ -33,21 +31,25 @@ jobs:
           content="${content//$'\r'/'%0D'}"
           # end of optional handling for multi line json
           echo "::set-output name=json::$content"
+      # Ensure that tag and version in `release.yml` are equal
+      - name: Tag and Network Id are equals
+        if: ${{ steps.tagName.outputs.tag != fromJson(steps.json.outputs.json).id }}
+        run: |
+          echo "Tag does not match Network Id."
+          echo "Tag: ${{ steps.tagName.outputs.tag }}"
+          echo "Network Id: ${{ fromJson(steps.json.outputs.json).id }}"
+          exit 1
+      # Creating release
       - name: build release notes
         id: notes
-        run: |
-          BODY=$(./gen-notes.js)
-          echo "::set-output name=body::${BODY}"
-      - uses: rickstaa/action-create-tag@v1
-        with:
-          tag: ${{ fromJson(steps.json.outputs.json).id }}
-      - name: Create Release
+        run: ./gen-notes.js > ./RELEASE.md
+      - name: Create Release draft
         id: create-release
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: Release ${{ fromJson(steps.json.outputs.json).id }}
-          body: ${{ steps.notes.outputs.body }}
-          draft: false
-          prerelease: false
+          name: ${{ fromJson(steps.json.outputs.json).name }}
+          body_path: ./RELEASE.md
+          draft: true
+          prerelease: true
