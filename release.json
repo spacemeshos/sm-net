@@ -1,6 +1,6 @@
 {
-  "id": 227,
-  "name": "devnet227",
+  "id": 228,
+  "name": "devnet228",
   "description": "This is a release of TweedleDev 227 - A Spacemesh 0.2 technical preview devnet",
   "versions": {
     "go-spacemesh": "v0.2.17-beta.0",
