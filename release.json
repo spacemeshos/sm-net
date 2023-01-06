@@ -1,10 +1,10 @@
 {
-  "id": 310,
-  "name": "devnet310",
-  "description": "This is a release of TweedleDev 310 - A Spacemesh 0.2 technical preview devnet",
+  "id": 311,
+  "name": "devnet311",
+  "description": "A Spacemesh 0.2 technical preview devnet",
   "versions": {
-    "go-spacemesh": "v0.2.19-beta.0",
+    "go-spacemesh": "v0.2.20-beta.0",
     "smrepl": "v0.1.32",
-    "smapp": "v0.2.9"
+    "smapp": "v0.2.10"
   }
 }
