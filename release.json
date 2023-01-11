@@ -1,6 +1,6 @@
 {
-  "id": 311,
-  "name": "devnet311",
+  "id": 312,
+  "name": "devnet312",
   "description": "A Spacemesh 0.2 technical preview devnet",
   "versions": {
     "go-spacemesh": "v0.2.20-beta.0",
