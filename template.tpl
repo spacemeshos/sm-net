@@ -15,9 +15,6 @@ Windows: https://storage.googleapis.com/spacemesh-release-builds/${versions.go-s
 macOS: https://storage.googleapis.com/spacemesh-release-builds/${versions.go-spacemesh}/macOS.zip
 Linux: https://storage.googleapis.com/spacemesh-release-builds/${versions.go-spacemesh}/Linux.zip
 
-# Smrepl
-- [${versions.smrepl}](https://github.com/spacemeshos/smrepl/releases/tag/${versions.smrepl})
-
 # Smapp
 - [Smapp ${versions.smapp}](https://github.com/spacemeshos/smapp/releases/tag/${versions.smapp})
 	
