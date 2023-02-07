@@ -1,10 +1,9 @@
 {
-  "id": 312,
-  "name": "devnet312",
-  "description": "A Spacemesh 0.2 technical preview devnet",
+  "id": "323-short",
+  "name": "devnet-323-short",
+  "description": "The network running on newer go-spacemesh and Smapp versions",
   "versions": {
-    "go-spacemesh": "v0.2.20-beta.0",
-    "smrepl": "v0.1.32",
-    "smapp": "v0.2.10"
+    "go-spacemesh": "v0.2.21-beta.0",
+    "smapp": "v0.2.11"
   }
 }
