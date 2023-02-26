@@ -1,9 +1,9 @@
 {
-  "id": "323-short",
-  "name": "devnet-323-short",
-  "description": "The network running on newer go-spacemesh and Smapp versions",
+  "id": "324-short",
+  "name": "devnet-324-short",
+  "description": "The network running on newer go-spacemesh and Smapp versions. Software not compatible with previous networks.",
   "versions": {
-    "go-spacemesh": "v0.2.21-beta.0",
-    "smapp": "v0.2.11"
+    "go-spacemesh": "v0.2.22-beta.0",
+    "smapp": "v0.2.12"
   }
 }
